@@ -1,0 +1,178 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct nd {
+    int num;
+    struct nd* next;
+}node;
+
+void crea_l(node**, node**); //Crea la lista se non ne esiste già una
+void add_l(node**, node**);
+int check_cond(node**, int);
+void vis_l(node**);
+void res_l(node**, node**);
+node** crea_vett(node**);
+void stampa_indx(node**, node**);
+
+int main(void) {
+    node* head=NULL;
+    node* tail;
+    node** v=NULL;
+    int scelta = 0;
+    while (scelta !=6) {
+        printf("Scegli una delle seguenti azioni:\n");
+        printf("1 - Aggiungi un elemento alla lista\n");
+        printf("2 - Visualizza la lista\n");
+        printf("3 - Resetta la lista\n");
+        printf("4 - Usa la funzione 'crea_vett'\n");
+        printf("5 - Visualizza gli indirizzi dei nodi e del vettore\n");
+        printf("6 - Esci dal programma\n");
+        scanf("%d", &scelta);
+        switch (scelta) {
+            case 1:
+                printf("Hai scelto di aggiungere un elemento alla lista\n");
+                if (head == NULL) crea_l(&head, &tail);
+                else add_l(&head, &tail);
+                break;
+
+            case 2:
+                printf("Hai scelto di visualizzare la lista\n");
+                printf("Lista:");
+                vis_l(&head);
+                break;
+
+            case 3:
+                printf("Hai scelto di resettare la lista\n\n");
+                res_l(&head, &tail);
+                break;
+
+            case 4:
+                printf("Hai scelto di usare 'crea_vett'\n");
+                v = crea_vett(&head);
+                break;
+
+            case 5:
+                printf("Hai scelto di visualizzare gli indirizzi dei nodi e quelli contenuti nel vettore\n");
+                stampa_indx(&head, v);
+                break;
+
+            case 6:
+                printf("Hai scelto di uscire dal programma\n");
+                if (v!=NULL) free(v);
+                res_l(&head, &tail);
+                break;
+
+            default:
+                printf("Inserisci un valore tra 1 e 6\n");
+                break;
+        }
+    }
+    return 0;
+}
+
+void crea_l(node** h, node** t) {
+    *h=malloc(sizeof(node));
+    if (*h == NULL) {
+        printf("Errore malloc\n");
+        exit(1);
+    }
+    printf("Carica elemento: ");
+    scanf("%d", &(*h)->num);
+    printf("\n");
+    (*h)->next = NULL;
+    *t = *h;
+}
+
+void add_l(node** h, node** t) {
+    int num_tmp;
+    printf("Carica elemento: ");
+    scanf("%d", &num_tmp);
+    if (!check_cond(h, num_tmp)) {
+        (*t)->next = malloc(sizeof(node));
+        if ((*t)->next == NULL) {
+            printf("Errore malloc\n");
+            exit(1);
+        }
+        *t = (*t)->next;
+        (*t)->num = num_tmp;
+        (*t)->next = NULL;
+        printf("\n");
+    }
+
+}
+
+int check_cond(node** h, int n) {
+    node* tmp = *h;
+    while (tmp != NULL) {
+        if (tmp->num == n) {
+            printf("Non inserire duplicati\n\n");
+            return 1;
+        }
+        tmp = tmp->next;
+    }
+    return 0;
+}
+
+void vis_l(node** h) {
+    node* tmp = *h;
+    if (tmp == NULL) {
+        printf(" vuota\n\n");
+        return;
+    }
+    while (tmp!=NULL) {
+        printf(" %d", tmp->num);
+        tmp = tmp->next;
+    }
+    printf("\n\n");
+}
+
+void res_l(node** h, node** t) {
+    node* tmp = *h;
+    if (tmp == NULL) {
+        printf("Non esiste una lista da resettare\n\n");
+        return;
+    }
+    while (tmp!=NULL) {
+        tmp = tmp->next;
+        free(*h);
+        *h = tmp;
+    }
+    *t = NULL;
+    *h = NULL;
+}
+
+node** crea_vett(node** h) {
+    int dim = 0;
+    node** v;
+    if (*h == NULL) {
+        printf("Per creare il vettore deve esistere una lista\n\n");
+        return 0;
+    }
+    node* tmp = *h;
+    while (tmp!=NULL) {
+        dim++;
+        tmp = tmp->next;
+    }
+    tmp = *h;
+    v = calloc(dim, sizeof(node*));
+    for (int i = 0; i < dim; i++) {
+        v[i] = tmp;
+        tmp = tmp->next;
+    }
+    printf("Vettore creato\n\n");
+    return v;
+}
+
+void stampa_indx(node** h, node** v) {
+    if (v == NULL || *h == NULL) {
+        printf("La lista e il vettore devono esistere contemporaneamente\n\n");
+        return;
+    }
+    node* tmp = *h;
+    int i = 0;
+    while (tmp!=NULL) {
+        printf("%p\n", tmp);
+        tmp = tmp->next;
+        printf("%p\n\n", v[i]);
+        i++;
+    }
+}
