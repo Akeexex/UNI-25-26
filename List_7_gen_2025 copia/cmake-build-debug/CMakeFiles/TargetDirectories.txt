@@ -1,0 +1,3 @@
+/Users/alex/CLionProjects/Uni 2025:26/Gemini/List_7_gen_2025/cmake-build-debug/CMakeFiles/List_7_gen_2025.dir
+/Users/alex/CLionProjects/Uni 2025:26/Gemini/List_7_gen_2025/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/alex/CLionProjects/Uni 2025:26/Gemini/List_7_gen_2025/cmake-build-debug/CMakeFiles/rebuild_cache.dir
